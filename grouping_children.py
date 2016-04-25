@@ -60,8 +60,10 @@ def min_groups_naive(lst):
             else:
                 groups.append([num])            
                 
-
+        # return number of groups
         return len(groups)
+
+
 
 
 if __name__ == '__main__':
