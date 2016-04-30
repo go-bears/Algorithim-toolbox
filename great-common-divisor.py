@@ -1,4 +1,15 @@
 import timeit
+import doctest
+
+"""
+
+>>> gcd_ea(232435, 1450)
+145
+
+>>>lcm(28851538,1183019)
+1933053046
+
+"""
 # Uses python3
 def calc_fib(n):
     if (n <= 1):
@@ -29,7 +40,7 @@ def last_fib(n):
 
 # print(last_fib(16))
 
-def gcd(n1, n2):
+def gcd1(n1, n2):
     """Find greatest common divisor with hill climbing alogrithim.
 
     divides both number by every number in range of lower number
@@ -41,12 +52,28 @@ def gcd(n1, n2):
         if n1 % i == 0 and n2 % i == 0 and i > best:
             best = i            
             
+    return best 
 
-    return best #divisor[-1]
 
 
-print gcd(232435, 1450)
-print timeit.timeit(lambda: gcd(232435, 1450), number=100)
+def gcd2(n1, n2):
+    """Finding greatest common divisor by caching.
+
+    Stores all integers in range 1-n2 that divide evenly
+    into n1 and n2
+     """
+
+    if n1 > 0 and n2 > 0:
+
+        divisor = []
+
+        for i in range(1,n2+1):
+            if n1 % i == 0 and n2 % i == 0:
+                divisor.append(i)
+
+        return divisor[-1]
+
+
 
 def gcd_ea(n1, n2):
     """finds greatest common divisor with Euclid's alogrithim """
@@ -60,34 +87,57 @@ def gcd_ea(n1, n2):
     # repeat until r == 0
     # return n2 when r == 0
 
-    if n1 > 0 and n2 >0:
-        if n1 > 0 and n2 > 0:
-            if n1 > n2:
-                a = n1
-                b = n2
-            else:
-                a = n2
-                b = n1
 
+    if n1 > 0 and n2 > 0:
+        if n1 > n2:
+            a = n1
+            b = n2
+        else:
+            a = n2
+            b = n1
+
+    remainder = a % b
+
+    while remainder > 0:
+        a, b = b, remainder
         remainder = a % b
 
-        while remainder > 0:
-            a, b = b, remainder
-            remainder = a % b
+    return b
 
-        return b
-
-print gcd_ea(232435, 1450)
-print timeit.timeit(lambda: gcd_ea(232435, 1450), number=100)
 
 
 def lcm(n1, n2):
-    """Find lowest common multiple of two numbers"""
+    """Find lowest common multiple of two numbers.
 
-    gcd = gcd_ea(n1,n2)
-    lcm = (n1 * n2) / gcd
+    Imports gcd_ea() find greatest common denominator
+    """
+    
+    if n1 > 0 and n2 > 0:
+        gcd = gcd_ea(n1,n2)
+        lcm = (n1 * n2) / gcd
 
     return lcm
 
-print lcm(232435,1450)
-print timeit.timeit(lambda: lcm(232435, 1450), number=100)
+
+
+if __name__ == '__main__':
+    import doctest
+
+    print lcm(232435,1450)
+    print timeit.timeit(lambda: lcm(232435, 1450), number=100)
+
+    print lcm(28851538,1183019)
+    print timeit.timeit(lambda: lcm(28851538,1183019), number=100)
+
+    print gcd_ea(232435, 1450)
+    print timeit.timeit(lambda: gcd_ea(232435, 1450), number=100)
+
+    print gcd1(232435, 1450)
+    print timeit.timeit(lambda: gcd1(232435, 1450), number=100)
+
+    print gcd2(232435, 1450)
+    print timeit.timeit(lambda: gcd1(232435, 1450), number=100)
+
+
+if doctest.testmod().failed == 0:
+    print "\n*** ALL TESTS PASSED. GO YOU!\n"
